@@ -10,12 +10,12 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField]
     private float _spawnTime;
     public float SpawnTime => _spawnTime;
-    void Start()
+    private void Start()
     {       
-        InvokeRepeating("Spawn",0, SpawnTime);
+        InvokeRepeating("Spawn", 0, SpawnTime);
     }
 
-    void Spawn()
+    private void Spawn()
     {
         float spawnMargin = 1f;
         Camera mainCamera = Camera.main;

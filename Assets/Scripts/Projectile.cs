@@ -49,13 +49,22 @@ public class Projectile : MonoBehaviour
 
     protected ITargetable GetClosestTarget()
     {
-        IEnumerable<ITargetable> targetObjects = FindObjectsOfType<MonoBehaviour>().OfType<ITargetable>(); //expensive op
+       // IEnumerable<ITargetable> targetObjects = FindObjectsOfType<MonoBehaviour>().OfType<ITargetable>(); //expensive op
+
+        var hits = Physics2D.CircleCastAll(_towerPosition, _range, Vector2.zero);
+
+        if (hits == null)
+            return null;
+        
+        ITargetable[] targets = hits.Select(hit => hit.collider.gameObject.GetComponent<ITargetable>()).OfType<ITargetable>().ToArray();
+
+
 
 
         ITargetable closestObject = null;
         float closestDistance = float.MaxValue;
 
-        foreach (ITargetable targetObject in targetObjects)
+        foreach (ITargetable targetObject in targets)
         {
             Vector2 targetPosition = targetObject.Transform.position;
             float distance = Vector2.Distance(_towerPosition, targetPosition);

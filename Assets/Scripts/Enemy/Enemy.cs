@@ -8,25 +8,18 @@ public abstract class Enemy : MonoBehaviour, ITargetable
     [SerializeField]
     protected EnemyData _enemyData;
     public Transform Transform => transform;
-
-
+    public float Health => _health;
+    
     protected float _speed;
     protected int _goldReward;
     protected float _damage;
     protected float _health;
     protected Rigidbody2D _rb;
-    public float Health => _health;
-
-
-
     public virtual void TakeDamage(float amount)
     {
         _health -= amount;
     }
-
-
-
-    protected virtual void Start()
+    protected virtual void Awake()
     {
         _speed = _enemyData.speed;
         _goldReward = _enemyData.goldReward;
@@ -34,7 +27,6 @@ public abstract class Enemy : MonoBehaviour, ITargetable
         _health = _enemyData.health;
         _rb = GetComponent<Rigidbody2D>();
     }
-
     protected virtual void Update() 
     {
         if (_health <= 0 && gameObject != null)
@@ -42,27 +34,18 @@ public abstract class Enemy : MonoBehaviour, ITargetable
             Destroy(gameObject);
         }
     }
-
     protected void FixedUpdate()
     {
         ChasePlayer();
     }
-
-
-
-
-
     protected Vector2 GetVectorTowardsPlayer()
     {
         GameObject player = GameObject.Find("Player");
         Vector2 playerPosition = player.transform.position;
         return (playerPosition - (Vector2)transform.position).normalized;
-
     }
     protected void ChasePlayer()
     {
         _rb.velocity = GetVectorTowardsPlayer() * _speed;
     }
-
-
 }
